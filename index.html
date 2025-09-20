@@ -344,8 +344,7 @@
     </style>
 
         <script>
-        // Chatbot API Key (kept in JS, not exposed in HTML)
-        const MULAMBWANE_CHATBOT_API_KEY = "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";
+        // Secure Netlify Functions Setup - API key safely stored in Netlify environment
 
         function openHelpChat() {
             document.getElementById('chatbot-box').style.display = 'flex';
@@ -376,23 +375,15 @@
             // Show loading
             appendMessage('bot', '<span class="italic text-gray-400">Thinking...</span>');
 
-            // Call your backend/chatbot API here
+            // Call Netlify Function (secure)
             try {
-                // Example: OpenAI-compatible endpoint
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                const response = await fetch('/.netlify/functions/chat', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${MULAMBWANE_CHATBOT_API_KEY}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4.1-mini',
-                        messages: [
-                            {role: 'system', content: 'You are Mulambwane Safaris live help assistant. Answer questions about hunting safaris, wildlife conservation, game meat, lodge accommodations, and safari experiences in Limpopo Province, South Africa. Be helpful, informative, and maintain the professional yet warm tone of the brand.'},
-                            {role: 'user', content: userMsg}
-                        ],
-                        max_tokens: 150,
-                        temperature: 0.7
+                        message: userMsg
                     })
                 });
                 const data = await response.json();
@@ -401,10 +392,10 @@
                 if (messages.lastChild) messages.removeChild(messages.lastChild);
                 
                 if (!response.ok) {
-                    console.error('API Error:', data);
-                    appendMessage('bot', '<span class="text-red-500">API Error: ' + (data.error?.message || 'Unknown error') + '</span>');
-                } else if (data.choices && data.choices[0] && data.choices[0].message) {
-                    appendMessage('bot', data.choices[0].message.content);
+                    console.error('Function Error:', data);
+                    appendMessage('bot', '<span class="text-red-500">Error: ' + (data.error || 'Service unavailable') + '</span>');
+                } else if (data.message) {
+                    appendMessage('bot', data.message);
                 } else {
                     console.error('Unexpected response format:', data);
                     appendMessage('bot', '<span class="text-red-500">Sorry, I could not get a response. Please try again.</span>');
