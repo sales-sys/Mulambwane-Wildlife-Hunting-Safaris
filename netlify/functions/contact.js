@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const { createTransporter } = require('nodemailer');
 
 exports.handler = async (event, context) => {
   // Only allow POST requests
@@ -64,11 +64,10 @@ exports.handler = async (event, context) => {
     // Log environment variables (safely)
     console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
     console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
-    console.log('nodemailer object:', typeof nodemailer);
-    console.log('createTransporter function:', typeof nodemailer.createTransporter);
+    console.log('createTransporter function:', typeof createTransporter);
     
     // Create email transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = createTransporter({
       service: 'gmail', // or your preferred email service
       auth: {
         user: process.env.EMAIL_USER, // Set this in Netlify environment variables
