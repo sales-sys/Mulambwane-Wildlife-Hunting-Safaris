@@ -64,6 +64,8 @@ exports.handler = async (event, context) => {
     // Log environment variables (safely)
     console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
     console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
+    console.log('nodemailer object:', typeof nodemailer);
+    console.log('createTransporter function:', typeof nodemailer.createTransporter);
     
     // Create email transporter
     const transporter = nodemailer.createTransporter({
