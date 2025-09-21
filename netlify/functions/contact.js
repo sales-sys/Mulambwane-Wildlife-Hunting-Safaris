@@ -64,11 +64,26 @@ exports.handler = async (event, context) => {
     // Log environment variables (safely)
     console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
     console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
-    console.log('nodemailer:', Object.keys(nodemailer));
-    console.log('nodemailer.default:', typeof nodemailer.default);
+    console.log('Full nodemailer object:', nodemailer);
+    console.log('nodemailer keys:', Object.keys(nodemailer));
+    console.log('nodemailer.createTransporter type:', typeof nodemailer.createTransporter);
+    console.log('nodemailer.default:', nodemailer.default);
+    
+    // Try different ways to access createTransporter
+    let createTransporter;
+    if (nodemailer.createTransporter) {
+      createTransporter = nodemailer.createTransporter;
+    } else if (nodemailer.default && nodemailer.default.createTransporter) {
+      createTransporter = nodemailer.default.createTransporter;
+    } else {
+      console.error('Cannot find createTransporter function');
+      throw new Error('Nodemailer createTransporter not found');
+    }
+    
+    console.log('Using createTransporter:', typeof createTransporter);
     
     // Create email transporter
-    const transporter = (nodemailer.default || nodemailer).createTransporter({
+    const transporter = createTransporter({
       service: 'gmail', // or your preferred email service
       auth: {
         user: process.env.EMAIL_USER, // Set this in Netlify environment variables
@@ -221,4 +236,5 @@ exports.handler = async (event, context) => {
         error: 'Failed to send inquiry. Please try again or contact us directly.' 
       })
     };
-  
+  }
+};
