@@ -4,7 +4,7 @@
   "description": "Mulambwane Wildlife & Hunting Safaris - Professional Safari Website",
   "main": "index.html",
   "dependencies": {
-    "nodemailer": "^6.9.7",
+    "nodemailer": "6.9.7",
     "node-fetch": "^2.7.0"
   },
   "keywords": ["safari", "hunting", "wildlife", "south-africa", "limpopo"],
