@@ -61,6 +61,10 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Log environment variables (safely)
+    console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
+    console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
+    
     // Create email transporter (you'll need to set up environment variables)
     const transporter = nodemailer.createTransporter({
       service: 'gmail', // or your preferred email service
