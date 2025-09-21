@@ -69,21 +69,11 @@ exports.handler = async (event, context) => {
     console.log('nodemailer.createTransporter type:', typeof nodemailer.createTransporter);
     console.log('nodemailer.default:', nodemailer.default);
     
-    // Try different ways to access createTransporter
-    let createTransporter;
-    if (nodemailer.createTransporter) {
-      createTransporter = nodemailer.createTransporter;
-    } else if (nodemailer.default && nodemailer.default.createTransporter) {
-      createTransporter = nodemailer.default.createTransporter;
-    } else {
-      console.error('Cannot find createTransporter function');
-      throw new Error('Nodemailer createTransporter not found');
-    }
-    
-    console.log('Using createTransporter:', typeof createTransporter);
+    // Use the correct function name: createTransport (not createTransporter)
+    console.log('Using createTransport:', typeof nodemailer.createTransport);
     
     // Create email transporter
-    const transporter = createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail', // or your preferred email service
       auth: {
         user: process.env.EMAIL_USER, // Set this in Netlify environment variables
