@@ -61,6 +61,10 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Log environment variables (safely)
+    console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
+    console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
+    
     // Create email transporter
     const transporter = nodemailer.createTransporter({
       service: 'gmail', // or your preferred email service
@@ -179,8 +183,12 @@ exports.handler = async (event, context) => {
     };
 
     // Send both emails
+    console.log('Attempting to send emails...');
     await transporter.sendMail(businessEmail);
+    console.log('Business email sent successfully');
+    
     await transporter.sendMail(customerEmail);
+    console.log('Customer email sent successfully');
 
     console.log('Contact inquiry sent successfully:', {
       name: `${data.firstName} ${data.lastName}`,
